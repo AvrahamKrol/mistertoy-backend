@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Cowbow Woody",
+    "price": 440,
+    "imgUrl": "https://www.shutterstock.com/ru/image-generated/woody-toy-story-solo-white-background-2818139179?trackingId=c1983751-0fc0-479d-88e4-f3aa0ef5f82b&listId=searchResults",
+    "labels": [],
+    "createdAt": 1791488536367,
+    "inStock": true,
+    "_id": "kr8cf"
+  },
+  {
+    "name": "Cowbow Woody",
+    "price": 188,
+    "imgUrl": "https://image.tmdb.org/t/p/original/pHa3BYewe7XDHRXIouXG2Vv1FJl.jpg",
+    "labels": [],
+    "createdAt": 1791488229686,
+    "inStock": true,
+    "_id": "lpFz0"
+  },
+  {
+    "_id": "ri362",
+    "name": "Talking Doll",
+    "imgUrl": "https://image.tmdb.org/t/p/original/pHa3BYewe7XDHRXIouXG2Vv1FJl.jpg",
+    "price": 123,
+    "labels": [
+      "Doll",
+      "Battery Powered",
+      "Baby"
+    ],
+    "createdAt": 1791486076512,
+    "inStock": true
+  },
+  {
+    "_id": "e8iYI",
+    "name": "Talking Doll",
+    "imgUrl": "https://image.tmdb.org/t/p/original/pHa3BYewe7XDHRXIouXG2Vv1FJl.jpg",
+    "price": 123,
+    "labels": [
+      "Doll",
+      "Battery Powered",
+      "Baby"
+    ],
+    "createdAt": 1791486076512,
+    "inStock": true
+  }
+]
