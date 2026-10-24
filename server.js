@@ -1,90 +1,43 @@
 import express from 'express'
-import path from 'path'
+import path, { dirname } from 'path'
+import cors from 'cors'
+import { fileURLToPath } from 'url'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+//Services
 import { loggerService } from './services/logger.service.js'
-
-import { toyService } from './services/toy.service.js'
 
 const app = express()
 
+// Express Config:
 app.use(express.static('public'))
 app.use(express.json())
 
-app.get('/api/toy', (req, res) => {
-  const filterBy = {
-    txt: req.query.name || '',
-    minPrice: +req.query.minPrice || 0,
+if (process.env.NODE_ENV === 'production') {
+  // Express serve static files on production environment
+  app.use(express.static(path.resolve(__dirname, 'public')))
+  console.log('__dirname: ', __dirname)
+} else {
+  // Configuring CORS
+  // Make sure origin contains the url
+  // your frontend dev-server is running on
+  const corsOptions = {
+    origin: [
+      'http://127.0.0.1:5173',
+      'http://localhost:5173',
+      'http://127.0.0.1:3000',
+      'http://localhost:3000',
+    ],
+    credentials: true,
   }
-  toyService
-    .query(filterBy)
-    .then((toys) => res.send(toys))
-    .catch((err) => {
-      loggerService.error('Cannot get toys', err)
-      res.status(400).send('Cannot get toys')
-    })
-})
+  app.use(cors(corsOptions))
+}
 
-app.get('/api/toy/:toyId', (req, res) => {
-  const { toyId } = req.params
+import { toyRoutes } from './api/toy/toy.routes.js'
 
-  toyService
-    .getById(toyId)
-    .then((toy) => res.send(toy))
-    .catch((err) => {
-      loggerService.error('Cannot get toy', err)
-      res.status(400).send('Cannot get toy')
-    })
-})
-
-app.post('/api/toy', (req, res) => {
-  // const loggedinUser = userService.validateToken(req.cookies.loginToken)
-  // if (!loggedinUser) return res.status(401).send('Cannot add toy')
-
-  const toy = {
-    name: req.body.name,
-    price: +req.body.price,
-    imgUrl:
-      req.body.imgUrl ||
-      'https://image.tmdb.org/t/p/original/pHa3BYewe7XDHRXIouXG2Vv1FJl.jpg',
-    labels: [],
-    createdAt: Date.now(),
-    inStock: true,
-  }
-  toyService
-    .save(toy)
-    .then((savedToy) => res.send(savedToy))
-    .catch((err) => {
-      loggerService.error('Cannot save toy', err)
-      res.status(400).send('Cannot save toy')
-    })
-})
-
-app.put('/api/toy/:id', (req, res) => {
-  const toy = {
-    _id: req.params.id,
-    name: req.body.name,
-    price: +req.body.price,
-    imgUrl: req.body.imgUrl,
-  }
-  toyService
-    .save(toy)
-    .then((savedToy) => res.send(savedToy))
-    .catch((err) => {
-      loggerService.error('Cannot save toy', err)
-      res.status(400).send('Cannot save toy')
-    })
-})
-
-app.delete('/api/toy/:toyId', (req, res) => {
-  const { toyId } = req.params
-  toyService
-    .remove(toyId)
-    .then(() => res.send('Removed!'))
-    .catch((err) => {
-      loggerService.error('Cannot remove toy', err)
-      res.status(400).send('Cannot remove toy')
-    })
-})
+app.use('/api/toy', toyRoutes)
 
 app.get('/*splat', (req, res) => {
   res.sendFile(path.resolve('public/index.html'))
